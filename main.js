@@ -1,6 +1,3 @@
-/* ==========================================================================
-   2. WIDGET
-   ========================================================================== */
 if (MINIMALIST) document.body.classList.add("minimal");
 
 const $ = s => document.querySelector(s);
@@ -24,8 +21,6 @@ let speed = 1, looping = false, timer = null, scale = 1;
 let features = [], marks = [], ready = false, fitted = false;
 let xScale = null, cursor = null;
 
-// merge aliases; two keys landing on one country keep the larger value, never
-// the sum — overlapping sources would double count
 function loadSet(name){
   setName = name;
   const d = DATASETS[name];
@@ -52,7 +47,7 @@ const scaleMax = () => SCALE_MAX[mode] ??
 // sqrt: linear leaves everything below the top country almost unshaded
 const shade = v => d3.interpolateLab(LO, HI)(Math.sqrt(Math.min(v / scaleMax(), 1)));
 
-/* ---- base map ----------------------------------------------------------- */
+/* json map courtesy of world atlas */
 d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(w => {
   features = topojson.feature(w, w.objects.countries).features
                      .filter(f => f.properties.name !== "Antarctica");
@@ -71,9 +66,8 @@ function recomputeMarks(){
   if (miss.length) console.warn("no map shape (add to ALIASES):", miss);
 }
 
-/* label goes at the pole of inaccessibility — the point furthest from the
-   country's own coast. A centroid drops Norway into Sweden and Chile into
-   Argentina. Grid search over the largest ring, refined twice. */
+/* previous code placed label in the wrong place due to countries islands counting
+as their own mass, skewing the placement of the pins */
 function labelPoint(f){
   const o = LABEL_OVERRIDES[f.properties.name];
   if (o) return { lonlat:o };
@@ -85,8 +79,7 @@ function labelPoint(f){
   return { ring };
 }
 
-// resolved at draw time because it depends on the current projection.
-// returns [x, y, room] — room = px to the nearest coast, used to size the label
+// reworked it to centre pin based on distance from coast
 function anchor(m){
   if (m.lonlat) return [...proj(m.lonlat), 30];
   const ring = m.ring.map(c => proj(c)).filter(p => p && isFinite(p[0]));
@@ -106,7 +99,7 @@ function anchor(m){
   return best ? [...best, bestRoom] : [...d3.polygonCentroid(ring), 0];
 }
 
-/* ---- layout ------------------------------------------------------------- */
+// Layout
 function resize(){
   const w = W(), h = H(); if (!w || !h) return;
   svg.attr("viewBox",[0,0,w,h]);
@@ -158,11 +151,9 @@ function update(){
   paintLegend();
 }
 
-/* Labels live inside the zoom layer, so a plain scale(1) would already grow
-   with the map 1:1. What's set here is a slower rate: the label grows with
-   the country, but not as fast — 10x zoom reads as roughly 5x label size,
-   and it reverses exactly on the way back out because it's a pure power
-   curve (scale^ZOOM_POWER), invertible either direction.
+/* Formula for 10x zoom = 5x label size,
+   and it reverses exactly on the way back out because it's an invertible pure 
+   powercurve (scale^ZOOM_POWER) --- HOW TO USE TO CUSTOMISE CODE:
      ZOOM_POWER = 1   -> label grows exactly as fast as the map (10x -> 10x)
      ZOOM_POWER = 0.7 -> 10x zoom -> ~5x label (10^0.7 ≈ 5.01) — set below
      ZOOM_POWER = 0   -> old behaviour, constant on-screen size
@@ -191,7 +182,7 @@ function paintLegend(){
   $("#legend-max").textContent = Math.round(scaleMax()).toLocaleString();
 }
 
-/* ---- graph -------------------------------------------------------------- */
+//adding graphs was more trouble than it's worth
 const PAD = { top:38, right:130, bottom:46, left:56 };
 const LEAD = 6;
 const TITLES = {
@@ -200,10 +191,13 @@ const TITLES = {
 };
 
 function buildGraph(all){
+   
   graphG.selectAll("*").remove();
+   
   const w = W(), h = H();
   const names = Object.keys(values);
   const series = names.map(n => ({ n, pts:d3.range(STEPS).map(s => valueAt(n,s) ?? 0) }));
+   
   series.forEach(s => s.peak = d3.max(s.pts));
 
   const total = all ? { n:"All countries",
