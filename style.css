@@ -1,0 +1,109 @@
+/* ---- everything visual lives here -------------------------------------- */
+:root{
+  --paper:#eef1f4;  --sea:#e4e9ee;
+  --shade-lo:#dfe4e9;              /* country at the bottom of the scale */
+  --shade-hi:#4a545e;              /* country at the top of the scale    */
+  --border:#eef1f4; --rule:#c9d2da;
+  --ink:#16242f;    --muted:#7b8794;
+  --accent:#1f6f6b;                /* play btn, current year, graph lead  */
+  --faint:#f2f4f6;                 /* date segment, back btn              */
+  --grey:#d7dbdf;                  /* pressed button fill                 */
+  --label:#ffffff;                 /* text on top of a country            */
+  --label-edge:#16242f;
+  --name-size:10px; --count-size:15px;
+  --fade:.18s;
+  --radius:3px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Archivo",system-ui,sans-serif;display:flex;flex-direction:column}
+
+/* ---- tabs -------------------------------------------------------------- */
+.tabs{flex:0 0 auto;display:flex;gap:2px;padding:12px 20px 0}
+.tab{border:0;background:none;font:inherit;font-size:13px;color:var(--muted);
+  padding:7px 13px;cursor:pointer;border-radius:var(--radius) var(--radius) 0 0}
+.tab[aria-selected="true"]{background:var(--sea);color:var(--ink);font-weight:600}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* ---- map --------------------------------------------------------------- */
+#map{flex:1 1 auto;min-height:220px;display:block;width:100%;cursor:grab}
+#map:active{cursor:grabbing}
+#map rect.sea{fill:var(--sea)}
+.country{stroke:var(--border);transition:fill var(--fade) linear}
+/* paint-order:stroke keeps the halo behind the glyphs, not eating into them */
+.label text{paint-order:stroke;stroke:var(--paper);stroke-width:3px;stroke-linejoin:round}
+.label .name{font-size:var(--name-size);letter-spacing:.02em}
+.label .value{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:var(--count-size)}
+.label .dot{fill:var(--ink)}
+
+/* ---- control chain ----------------------------------------------------- */
+.chain{flex:0 0 auto;display:flex;align-items:stretch;margin:12px 20px 0;
+  overflow-x:auto;scrollbar-width:none}
+.chain::-webkit-scrollbar{display:none}
+.chain>*{flex:0 0 auto;box-sizing:border-box;height:38px;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:0 12px;white-space:nowrap;font:inherit;font-size:12px;line-height:1.15;
+  color:var(--ink);background:transparent;border:1px solid var(--rule);
+  border-right-width:0;border-radius:0}
+.chain>:first-child{border-radius:19px 0 0 19px}
+.chain>:last-child{border-right-width:1px;border-radius:0 19px 19px 0}
+.chain>.grow{flex:1 1 auto}
+.chain button{cursor:pointer}
+.chain button.primary{background:var(--accent);border-color:var(--accent);color:#fff;padding:0 15px}
+.chain button[aria-pressed="true"]{background:var(--grey);font-weight:600}
+.chain button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.chain .date{background:var(--faint);color:var(--muted);font-variant-numeric:tabular-nums;
+  font-weight:600;cursor:default;min-width:92px}
+.chain .sub{font-size:10px;color:var(--muted)}
+.chain button[aria-pressed="true"] .sub{color:var(--ink)}
+
+/* minimalist: single round play button, no chain */
+body.minimal .chain{border:0;margin-bottom:0}
+body.minimal .chain>*{display:none}
+body.minimal .chain>#play{display:grid;place-items:center;width:40px;height:40px;
+  padding:0;border-radius:50%;border:0}
+
+/* ---- year strip -------------------------------------------------------- */
+.timeline{flex:0 0 auto;display:flex;justify-content:space-between;align-items:flex-end;
+  margin:10px 20px 0;border-top:1px solid var(--rule);padding-top:8px}
+.year{border:0;background:none;padding:6px 1px 0;font:inherit;font-size:11px;
+  color:var(--muted);cursor:pointer;position:relative}
+.year::before{content:"";position:absolute;top:-9px;left:50%;width:1px;height:6px;background:var(--rule)}
+.year[aria-current="true"]{color:var(--accent);font-weight:600}
+.year[aria-current="true"]::before{background:var(--accent);height:9px;top:-12px}
+.year:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius)}
+
+/* ---- legend ------------------------------------------------------------ */
+.legend{flex:0 0 auto;display:flex;align-items:center;gap:6px;margin:10px 20px 0;
+  font-size:10px;color:var(--muted)}
+.legend b{font-weight:600;color:var(--ink)}
+.ramp{width:200px;height:9px;border-radius:2px;border:1px solid var(--rule)}
+
+/* ---- graph ------------------------------------------------------------- */
+.axis text{fill:var(--muted);font-size:10px}
+.gridline{stroke:var(--rule);stroke-dasharray:2 3}
+/* fill:none is required — an undeclared fill paints solid black blobs */
+.series{fill:none;stroke:var(--muted);stroke-opacity:.28;stroke-width:1}
+.series.lead{stroke-opacity:1;stroke-width:1.9}
+.series-name{font-size:10px;font-weight:600}
+.cursor{stroke:var(--ink);stroke-opacity:.45;stroke-dasharray:3 3}
+.gtitle{fill:var(--ink);font-size:13px;font-weight:600}
+.caveat{fill:var(--muted);font-size:10px;font-style:italic}
+.back{cursor:pointer}
+.back rect{fill:var(--faint);stroke:var(--rule)}
+.back text{fill:var(--ink);font-size:11px;font-weight:600;text-anchor:middle}
+
+/* ---- panels ------------------------------------------------------------ */
+.panels{flex:0 0 auto;padding:6px 20px 18px;font-size:12px;line-height:1.55}
+details{border-top:1px solid var(--rule)}
+summary{cursor:pointer;padding:9px 0;font-weight:500;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";display:inline-block;width:1.1em;color:var(--accent);font-weight:600}
+details[open] summary::before{content:"\2212"}
+summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details p{margin:0 0 10px}
+.footnote{margin:12px 0 0;font-size:11px;color:var(--muted);line-height:1.6}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
