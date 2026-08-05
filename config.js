@@ -1,6 +1,6 @@
-/*                                          /*
-   1. CONFIG + DATA — edit this block only
-/*                                          */
+/*                                                    /*
+   1. CONFIG + DATA - Edit here for customisation
+/*                                                    */
 const MINIMALIST = false; // This option, when true, removes a lot of button fucntionality. Minimalistic takes it down to the core timeline map UI.
 
 
