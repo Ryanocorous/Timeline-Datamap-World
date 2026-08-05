@@ -1,18 +1,18 @@
-/* ---- everything visual lives here -------------------------------------- */
+/* The maps visual content (countries colours, buttons, etc) */
 :root{
-  --paper:#eef1f4;  --sea:#e4e9ee;
-  --shade-lo:#dfe4e9;              /* country at the bottom of the scale */
-  --shade-hi:#4a545e;              /* country at the top of the scale    */
-  --border:#eef1f4; --rule:#c9d2da;
-  --ink:#16242f;    --muted:#7b8794;
-  --accent:#1f6f6b;                /* play btn, current year, graph lead  */
-  --faint:#f2f4f6;                 /* date segment, back btn              */
-  --grey:#d7dbdf;                  /* pressed button fill                 */
-  --label:#ffffff;                 /* text on top of a country            */
-  --label-edge:#16242f;
-  --name-size:10px; --count-size:15px;
-  --fade:.18s;
-  --radius:3px;
+--paper:#eef1f4;  --sea:#e4e9ee;       /* page bg, water on the map
+  --shade-lo:#dfe4e9;                  /* country at the bottom of the scale. To change, update to the colour you want then save. You can use "White" or a colour code */
+  --shade-hi:#4a545e;                  /* country at the top of the scale                                                                                              */
+  --border:#eef1f4; --rule:#c9d2da;    /* Border: colour of very light outline on countries, rule: UI line divider colour                                              */
+  --ink:#16242f;    --muted:#7b8794;   /* Ink: body text, tab text, label text - primary colour for text. Muted: 'dimmed' or muted colour for UI elements              */
+  --accent:#1f6f6b;                    /* play button, current year, graph lead accent                                                                                 */
+  --faint:#f2f4f6;                     /* Date segment, back button                                                                                                    */
+  --grey:#d7dbdf;                      /* Pressed button fill, visual feedback for when you click a button. Tells you it's pressed                                     */
+  --label:#ffffff;                     /* text on top of a country                                                                                                     */
+  --label-edge:#16242f;                /* text shadow/outline for labels                                                                                               */
+  --name-size:10px; --count-size:15px; /* country name & value font sizes                                                                                              */
+  --fade:.18s;                         /* transition duration                                                                                                          */
+  --radius:3px;                        /* border radius for buttons                                                                                                    */
 }
 
 *{box-sizing:border-box}
@@ -20,14 +20,14 @@ html,body{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:"Archivo",system-ui,sans-serif;display:flex;flex-direction:column}
 
-/* ---- tabs -------------------------------------------------------------- */
+/* tabs style */
 .tabs{flex:0 0 auto;display:flex;gap:2px;padding:12px 20px 0}
 .tab{border:0;background:none;font:inherit;font-size:13px;color:var(--muted);
   padding:7px 13px;cursor:pointer;border-radius:var(--radius) var(--radius) 0 0}
 .tab[aria-selected="true"]{background:var(--sea);color:var(--ink);font-weight:600}
 .tab:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
-/* ---- map --------------------------------------------------------------- */
+/* map style */
 #map{flex:1 1 auto;min-height:220px;display:block;width:100%;cursor:grab}
 #map:active{cursor:grabbing}
 #map rect.sea{fill:var(--sea)}
@@ -38,7 +38,7 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .label .value{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:var(--count-size)}
 .label .dot{fill:var(--ink)}
 
-/* ---- control chain ----------------------------------------------------- */
+/* chain css */
 .chain{flex:0 0 auto;display:flex;align-items:stretch;margin:12px 20px 0;
   overflow-x:auto;scrollbar-width:none}
 .chain::-webkit-scrollbar{display:none}
@@ -59,13 +59,13 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .chain .sub{font-size:10px;color:var(--muted)}
 .chain button[aria-pressed="true"] .sub{color:var(--ink)}
 
-/* minimalist: single round play button, no chain */
+/* MINIMALISM: single round play button, no chain, for people who eat pasta every day and have no furniture */
 body.minimal .chain{border:0;margin-bottom:0}
 body.minimal .chain>*{display:none}
 body.minimal .chain>#play{display:grid;place-items:center;width:40px;height:40px;
   padding:0;border-radius:50%;border:0}
 
-/* ---- year strip -------------------------------------------------------- */
+/* THE TIMELINE - THE ONE AND ONLY! */
 .timeline{flex:0 0 auto;display:flex;justify-content:space-between;align-items:flex-end;
   margin:10px 20px 0;border-top:1px solid var(--rule);padding-top:8px}
 .year{border:0;background:none;padding:6px 1px 0;font:inherit;font-size:11px;
@@ -75,13 +75,13 @@ body.minimal .chain>#play{display:grid;place-items:center;width:40px;height:40px
 .year[aria-current="true"]::before{background:var(--accent);height:9px;top:-12px}
 .year:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--radius)}
 
-/* ---- legend ------------------------------------------------------------ */
+/* proper legend innit */
 .legend{flex:0 0 auto;display:flex;align-items:center;gap:6px;margin:10px 20px 0;
   font-size:10px;color:var(--muted)}
 .legend b{font-weight:600;color:var(--ink)}
 .ramp{width:200px;height:9px;border-radius:2px;border:1px solid var(--rule)}
 
-/* ---- graph ------------------------------------------------------------- */
+
 .axis text{fill:var(--muted);font-size:10px}
 .gridline{stroke:var(--rule);stroke-dasharray:2 3}
 /* fill:none is required — an undeclared fill paints solid black blobs */
@@ -95,7 +95,7 @@ body.minimal .chain>#play{display:grid;place-items:center;width:40px;height:40px
 .back rect{fill:var(--faint);stroke:var(--rule)}
 .back text{fill:var(--ink);font-size:11px;font-weight:600;text-anchor:middle}
 
-/* ---- panels ------------------------------------------------------------ */
+/* panel css */
 .panels{flex:0 0 auto;padding:6px 20px 18px;font-size:12px;line-height:1.55}
 details{border-top:1px solid var(--rule)}
 summary{cursor:pointer;padding:9px 0;font-weight:500;list-style:none}
