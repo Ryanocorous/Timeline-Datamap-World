@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timeline map of Sample Data</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--If adding more tabs, add more button class html tags inside the tabs class-->
+
+<!-- remove comment to add tabs
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-set="Tab 1 data" aria-selected="true">Tab 1 data</button>
+  <button class="tab" role="tab" data-set="Tab 2 data" aria-selected="false">Tab 2 data</button>
+</div>
+-->
+
+<svg id="map" role="img" aria-label="Timeline map"></svg>
+
+<div class="chain">
+  <button id="play" class="primary" aria-label="Play">&#9654;</button>
+  <button id="loop" aria-pressed="false" aria-label="Loop">&#8635;</button>
+  <button id="speed" aria-label="Playback speed">1&times;</button>
+  <button id="prev" aria-label="Back one step">&#8249;</button>
+  <button id="next" aria-label="Forward one step">&#8250;</button>
+  <span class="date grow" id="date">01 / 2000</span>
+  <button class="view grow" data-view="graph"     aria-pressed="false">Graph<span class="sub">(per country)</span></button>
+  <button class="view grow" data-view="graph-all" aria-pressed="false">Graph<span class="sub">(total, all countries)</span></button>
+  <button class="view grow" data-view="yearly"    aria-pressed="true">Yearly</button>
+  <button class="view grow" data-view="monthly"   aria-pressed="false">Monthly</button>
+  <button class="view grow" data-view="daily"     aria-pressed="false">Daily</button>
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+<!--Map Legend -- Shows the scale from highest to lowest (0 to max), legend-max can be changed to customise this-->
+<!-- remove comment to enable map legend
+<div class="legend">
+  <b id="legend-label">Samples per year</b>
+  <span>0</span><div class="ramp" id="ramp"></div><span id="legend-max">0</span>
+</div>
+-->
+
+<div class="panels">
+  <details>
+    <summary>References</summary>
+    <p>Sample data.</p>
+  </details>
+  <p class="footnote">Sample data &mdash; 40 countries with randomly generated start years and
+  growth rates. Nothing here is a real figure.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="config.js"></script>
+<script src="main.js"></script>
+
+
+</body>
+</html>
